@@ -60,11 +60,44 @@ JWT_SECRET=super-secret-jwt-key-change-this-in-production
 JWT_EXP_HOURS=24
 ```
 
-### 3. Jalankan Aplikasi
+### 3. Menjalankan Database Seeder (Data Dummy)
+Anda dapat mengisi database dengan data dummy lengkap (Bazaar, 5 Stan Outlet, 7 Kategori, 7 Vendor, 21 Produk, User Admin & Kasir, serta 25+ riwayat transaksi):
+
+**Opsi A — Melalui CLI Flag:**
+```bash
+# Mengisi data dummy (aman, mengisi tabel kosong)
+go run main.go --seed
+
+# Reset total dan isi ulang data dummy dari awal (fresh mode)
+go run main.go --seed-fresh
+```
+
+**Opsi B — Melalui Standalone Runner:**
+```bash
+go run ./cmd/seed
+# atau reset fresh:
+go run ./cmd/seed -fresh
+```
+
+**Opsi C — Melalui HTTP Endpoint (REST Client / Browser):**
+- `POST http://localhost:8080/api/dev/seed` (atau `POST http://localhost:8080/api/dev/seed?fresh=true`)
+
+> **Default Akun Uji Coba (Password semua akun: `password123`):**
+> - **Admin Master**: `admin@example.com`
+> - **Panitia Bazar**: `panitia@bazar.com`
+> - **Kasir Stan Makanan**: `kasir@example.com` / `kasir1@example.com`
+> - **Kasir Stan Minuman**: `kasir2@example.com`
+> - **Kasir Stan Snack**: `kasir3@example.com`
+> - **Kasir Stan Souvenir & Rohani**: `kasir4@example.com`
+> - **Kasir Stan Pakaian & Craft**: `kasir5@example.com`
+
+---
+
+### 4. Jalankan Server Aplikasi
 ```bash
 go run main.go
 ```
-> Tabel `users` akan otomatis dibuat oleh fitur **AutoMigrate** GORM saat aplikasi pertama kali dijalankan.
+
 
 ---
 

@@ -17,6 +17,24 @@ func main() {
 	// Connect to Database
 	config.ConnectDB()
 
+	// Check CLI flags for seeder execution
+	args := os.Args[1:]
+	for _, arg := range args {
+		if arg == "--seed" || arg == "-seed" {
+			log.Println("CLI Flag detected: Seeding database...")
+			if err := config.SeedAll(config.DB, false); err != nil {
+				log.Fatalf("Seeding failed: %v", err)
+			}
+			break
+		} else if arg == "--seed-fresh" || arg == "-seed-fresh" || arg == "--fresh" {
+			log.Println("CLI Flag detected: Fresh seeding database...")
+			if err := config.SeedAll(config.DB, true); err != nil {
+				log.Fatalf("Fresh seeding failed: %v", err)
+			}
+			break
+		}
+	}
+
 	// Initialize Fiber App
 	app := fiber.New(fiber.Config{
 		AppName: "Bazar Backend API v1.0",

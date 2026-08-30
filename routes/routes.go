@@ -19,6 +19,7 @@ func SetupRoutes(app *fiber.App) {
 	productController := controllers.NewProductController()
 	transactionController := controllers.NewTransactionController()
 	transactionItemController := controllers.NewTransactionItemController()
+	devController := controllers.NewDevController()
 
 	// Base / Health check route
 	app.Get("/", func(c fiber.Ctx) error {
@@ -115,4 +116,11 @@ func SetupRoutes(app *fiber.App) {
 	transactionItems.Get("/top-selling", middleware.AuthMiddleware(), transactionItemController.GetTopSelling)
 	transactionItems.Get("/", middleware.AuthMiddleware(), transactionItemController.GetAll)
 	transactionItems.Get("/:id", middleware.AuthMiddleware(), transactionItemController.GetByID)
+
+	// ==========================================
+	// Dev & Database Seeder Routes
+	// ==========================================
+	dev := api.Group("/dev")
+	dev.Post("/seed", devController.Seed)
+	dev.Get("/seed", devController.Seed)
 }

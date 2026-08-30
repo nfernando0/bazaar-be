@@ -2,6 +2,26 @@
 GET http://localhost:8080/
 Accept: application/json
 
+### ==============================================
+### DATABASE SEEDER (DUMMY DATA GENERATOR)
+### ==============================================
+
+### 1a. Run Database Seeder (Safe Mode - Populates empty tables)
+POST http://localhost:8080/api/dev/seed
+Content-Type: application/json
+
+{
+  "fresh": false
+}
+
+### 1b. Run Database Seeder (Fresh Mode - Reset and Re-seed all tables)
+POST http://localhost:8080/api/dev/seed?fresh=true
+Content-Type: application/json
+
+### ==============================================
+### AUTHENTICATION API
+### ==============================================
+
 ### 2. Register Admin
 POST http://localhost:8080/api/auth/register
 Content-Type: application/json
