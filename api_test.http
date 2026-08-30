@@ -1,0 +1,222 @@
+### 1. Health Check
+GET http://localhost:8080/
+Accept: application/json
+
+### 2. Register Admin
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Nando Admin",
+  "email": "admin@example.com",
+  "password": "password123",
+  "role": "admin"
+}
+
+### 3. Login Admin
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+
+### Simpan token dari response login ke variable
+@authToken = {{login.response.body.data.token}}
+
+### 4. Get Current Profile
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ==============================================
+### BAZAAR API
+### ==============================================
+
+### 5. Create Bazaar
+# @name createBazaar
+POST http://localhost:8080/api/bazaars
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Bazaar Ramadhan 2026",
+  "description": "Bazaar akbar kuliner dan fashion nusantara",
+  "start_date": "2026-03-01",
+  "end_date": "2026-03-31",
+  "status": "active"
+}
+
+### 6. Get All Bazaars
+GET http://localhost:8080/api/bazaars
+Accept: application/json
+
+### 7. Get Bazaar by ID
+GET http://localhost:8080/api/bazaars/1
+Accept: application/json
+
+### ==============================================
+### OUTLET API
+### ==============================================
+
+### 8. Create Outlet under Bazaar 1
+POST http://localhost:8080/api/outlets
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "bazaar_id": 1,
+  "name": "Outlet Hall Utama",
+  "code": "OUT-HALL-01",
+  "location": "Lobby Utama Lantai 1"
+}
+
+### 9. Get All Outlets
+GET http://localhost:8080/api/outlets
+Accept: application/json
+
+### 10. Get Outlet by ID
+GET http://localhost:8080/api/outlets/1
+Accept: application/json
+
+### ==============================================
+### CATEGORY API
+### ==============================================
+
+### 11. Create Category
+POST http://localhost:8080/api/categories
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Minuman Kopi"
+}
+
+### ==============================================
+### VENDOR API
+### ==============================================
+
+### 12. Create Vendor
+POST http://localhost:8080/api/vendors
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Kopi Senja Express",
+  "contact_person": "Andi",
+  "phone": "081234567890"
+}
+
+### 13. Assign Vendor to Outlet
+POST http://localhost:8080/api/vendor-outlets
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "vendor_id": 1,
+  "outlet_id": 1,
+  "booth_number": "Booth-A1"
+}
+
+### ==============================================
+### PRODUCT API
+### ==============================================
+
+### 14. Create Product 1
+POST http://localhost:8080/api/products
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "vendor_id": 1,
+  "category_id": 1,
+  "name": "Es Kopi Susu Gula Aren",
+  "price": 20000,
+  "stock": 50
+}
+
+### 15. Create Product 2
+POST http://localhost:8080/api/products
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "vendor_id": 1,
+  "category_id": 1,
+  "name": "Americano Dingin",
+  "price": 18000,
+  "stock": 30
+}
+
+### 16. Get All Products
+GET http://localhost:8080/api/products
+Accept: application/json
+
+### ==============================================
+### TRANSACTION (POS / CHECKOUT) API
+### ==============================================
+
+### 17. Create Transaction (Checkout & Deduct Stock)
+POST http://localhost:8080/api/transactions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "outlet_id": 1,
+  "payment_method": "qris",
+  "items": [
+    {
+      "product_id": 1,
+      "quantity": 2
+    },
+    {
+      "product_id": 2,
+      "quantity": 1
+    }
+  ]
+}
+
+### 18. Get All Transactions
+GET http://localhost:8080/api/transactions
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 19. Get Transaction by ID
+GET http://localhost:8080/api/transactions/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 20. Get Transaction Summary (Revenue & Count)
+GET http://localhost:8080/api/transactions/summary
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ==============================================
+### TRANSACTION ITEMS & SALES ANALYTICS API
+### ==============================================
+
+### 21. Get All Transaction Items (Filter: ?transaction_id=1, ?product_id=1, ?vendor_id=1, ?outlet_id=1)
+GET http://localhost:8080/api/transaction-items
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 22. Get Top Selling Products (Leaderboard)
+GET http://localhost:8080/api/transaction-items/top-selling?limit=5
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 23. Get Transaction Item Detail by ID
+GET http://localhost:8080/api/transaction-items/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ==============================================
+### LOGOUT
+### ==============================================
+
+### 24. Logout
+POST http://localhost:8080/api/auth/logout
+Authorization: Bearer {{authToken}}
+Accept: application/json
